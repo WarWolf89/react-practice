@@ -14,7 +14,7 @@ class App extends Component {
       { id: "ABC", name: "Ass", age: 27 }
     ],
     username: "THE NAME",
-    input: "",
+    charComponents: [],
     inputLength: 0,
     showPersons: false
   };
@@ -25,25 +25,38 @@ class App extends Component {
     });
   };
 
-  textInputPropHandler = event => {
+  textInputPropHandler = (event, charComponents) => {
     const input = event.target.value;
     this.setState({
-      input,
       inputLength: event.target.value.length
     });
+    this.createCharComponents(input);
   };
 
-  createCharComponents = () => {
-    console.log("CALLED");
-    let charComponents = null;
-    charComponents = (
+  createCharComponents = input => {
+    const charComponents = (
       <div>
-        {[...this.state.input].map(c => {
-          return <CharComponent char={c} />;
+        {[...input].map((c, index) => {
+          console.log(index);
+          return (
+            <CharComponent
+              char={c}
+              click={() => this.deleteCharHandler(index)}
+            />
+          );
         })}
       </div>
     );
-    return charComponents;
+    this.setState({ charComponents });
+  };
+
+  deleteCharHandler = charIndex => {
+    const charComponents = { ...this.state.charComponents };
+    const newComponents = React.cloneElement(
+      charComponents,
+      charComponents.props.children.splice(charIndex, 1)
+    );
+    this.setState({ charComponents: newComponents });
   };
 
   deletePersonHandler = personIndex => {
@@ -72,8 +85,6 @@ class App extends Component {
 
   render() {
     let persons = null;
-    let charcomponents = this.createCharComponents();
-
     if (this.state.showPersons) {
       persons = (
         <div>
@@ -97,7 +108,7 @@ class App extends Component {
         <h1>THIS IS A REACT APP</h1>
         <button onClick={this.togglePersonsHandler}>Show Persons</button>
         {persons}
-        {charcomponents}
+        {this.state.charComponents}
         <input onChange={this.textInputPropHandler} />
         <p>input length: {this.state.inputLength}</p>
         <UserInput
