@@ -3,6 +3,8 @@ import "./App.css";
 import Person from "./Person/Person";
 import UserOutput from "./UserOutput/UserOutput";
 import UserInput from "./UserInput/UserInput";
+import Validation from "./Validation/Validation";
+import CharComponent from "./CharComponent/CharComponent";
 
 class App extends Component {
   state = {
@@ -12,6 +14,8 @@ class App extends Component {
       { id: "ABC", name: "Ass", age: 27 }
     ],
     username: "THE NAME",
+    input: "",
+    inputLength: 0,
     showPersons: false
   };
 
@@ -19,6 +23,27 @@ class App extends Component {
     this.setState({
       username: event.target.value
     });
+  };
+
+  textInputPropHandler = event => {
+    const input = event.target.value;
+    this.setState({
+      input,
+      inputLength: event.target.value.length
+    });
+  };
+
+  createCharComponents = () => {
+    console.log("CALLED");
+    let charComponents = null;
+    charComponents = (
+      <div>
+        {[...this.state.input].map(c => {
+          return <CharComponent char={c} />;
+        })}
+      </div>
+    );
+    return charComponents;
   };
 
   deletePersonHandler = personIndex => {
@@ -47,6 +72,7 @@ class App extends Component {
 
   render() {
     let persons = null;
+    let charcomponents = this.createCharComponents();
 
     if (this.state.showPersons) {
       persons = (
@@ -71,11 +97,15 @@ class App extends Component {
         <h1>THIS IS A REACT APP</h1>
         <button onClick={this.togglePersonsHandler}>Show Persons</button>
         {persons}
+        {charcomponents}
+        <input onChange={this.textInputPropHandler} />
+        <p>input length: {this.state.inputLength}</p>
         <UserInput
           usernameChanged={this.usernameHandler.bind(this)}
           username={this.state.username}
         />
         <UserOutput username={this.state.username} />
+        <Validation inputLength={this.state.inputLength} />
       </div>
     );
   }
