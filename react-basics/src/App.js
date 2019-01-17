@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import Radium from "radium";
 import "./App.css";
 import Person from "./Person/Person";
 import UserOutput from "./UserOutput/UserOutput";
@@ -25,7 +26,7 @@ class App extends Component {
     });
   };
 
-  textInputPropHandler = (event, charComponents) => {
+  textInputPropHandler = event => {
     const input = event.target.value;
     this.setState({
       inputLength: event.target.value.length
@@ -85,6 +86,19 @@ class App extends Component {
 
   render() {
     let persons = null;
+    const style = {
+      backgroundColor: "green",
+      color: "white",
+      font: "inherit",
+      border: "1px solid blue",
+      padding: "8px",
+      cursor: "pointer",
+      ":hover": {
+        backgroundColor: "lightgreen",
+        color: "black"
+      }
+    };
+
     if (this.state.showPersons) {
       persons = (
         <div>
@@ -101,12 +115,28 @@ class App extends Component {
           })}
         </div>
       );
+
+      style.backgroundColor = "red";
+      style[":hover"] = {
+        backgroundColor: "salmon",
+        color: "black"
+      };
     }
 
+    let classes = [];
+    if (this.state.persons.length <= 2) {
+      classes.push("red");
+    }
+
+    if (this.state.persons.length <= 1) {
+      classes.push("bold");
+    }
     return (
       <div className="App">
-        <h1>THIS IS A REACT APP</h1>
-        <button onClick={this.togglePersonsHandler}>Show Persons</button>
+        <h1 className={classes.join(" ")}>THIS IS A REACT APP</h1>
+        <button style={style} onClick={this.togglePersonsHandler}>
+          Show Persons
+        </button>
         {persons}
         {this.state.charComponents}
         <input onChange={this.textInputPropHandler} />
@@ -122,4 +152,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default Radium(App);
