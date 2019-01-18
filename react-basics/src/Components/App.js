@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import Radium from "radium";
 import "./App.css";
-import Person from "./Person/Person";
-import UserOutput from "./UserOutput/UserOutput";
-import UserInput from "./UserInput/UserInput";
+import Person from "./Persons/Person/Person";
+import UserOutput from "../UserOutput/UserOutput";
+import UserInput from "../UserInput/UserInput";
 import Validation from "./Validation/Validation";
-import CharComponent from "./CharComponent/CharComponent";
+import CharComponent from "../CharComponent/CharComponent";
 
 class App extends Component {
   state = {
